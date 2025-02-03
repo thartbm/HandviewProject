@@ -1,0 +1,42 @@
+---
+title: "SMCL Coding Club"
+output: html_notebook
+---
+
+# Overview
+
+In this experiment participants adapted to a 30 degree rotation, with various kinds of feedback:
+
+1. Regular cursor feedback: "control"
+2. Cursorjump feedback , where the rotation is shown at 1/3rd the reach on each training trial: "cursorjump"
+3. A group where both the cursor and hand were visible during training1' "handview"
+4. A group that was explained the rotation beforehand: "instructed"
+
+All reach were to targets at 45, 90 and 135 degrees.
+
+## Data
+
+There are several kind of data the we could analyse:
+
+1. Training reaches
+2. No-cursor reaches
+3. Passive localization
+4. Active localization
+
+Both collected in the aligned and rotated phase of the task.
+
+## Analysis plan
+
+- for reaches: calculate reach deviation at 1/4 of the reach
+- hand localization: no yet
+
+# Reach Training
+
+1. Calculate baseline (trials 31 - 45: 5 reaches per target)
+2. Correct rotated reaches for baseline deviations
+3. Plot a learning curve
+
+(4. fit an exponential to the learning curve)
+
+  
+  
