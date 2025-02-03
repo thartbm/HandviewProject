@@ -10,7 +10,8 @@ getData <- function() {
                                                         'handview_aligned.zip',
                                                         'handview_rotated.zip',
                                                         'cursorjump_aligned.zip',
-                                                        'cursorjump_rotated.zip'
+                                                        'cursorjump_rotated.zip',
+                                                        'demographics.csv'
                                                                  )  ),
                          folder      = 'data/',
                          overwrite   = TRUE,
