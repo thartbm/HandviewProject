@@ -11,7 +11,8 @@ getData <- function() {
                                                         'handview_rotated.zip',
                                                         'cursorjump_aligned.zip',
                                                         'cursorjump_rotated.zip',
-                                                        'demographics.csv'
+                                                        'demographics.csv',
+                                                        'schedule.csv'
                                                                  )  ),
                          folder      = 'data/',
                          overwrite   = TRUE,
@@ -32,5 +33,54 @@ groupParticipants <- function(group) {
   participants <- demo$participant[which(demo$group == group)]
   
   return(participants)
+  
+}
+
+# schedule -----
+
+getSchedule <- function(order=NULL, addsubtasktrialnums=FALSE) {
+  
+  schedule <- read.csv('data/schedule.csv', stringsAsFactors = F)
+  
+  # figure out strategy include/exclude order, and replace strategy column with 
+  # 'include' and 'exclude' values
+  if (!is.null(order)) {
+    if (is.character(order) & length(order) == 1) {
+      if (order %in% c('EI', 'IE')) {
+        # valid order
+        
+        if (order == 'IE') {
+          schedule$strategy[which(schedule$strategy == 0)] <- 'include'
+          schedule$strategy[which(schedule$strategy == 1)] <- 'exclude'
+        }
+        if (order == 'EI') {
+          schedule$strategy[which(schedule$strategy == 0)] <- 'exclude'
+          schedule$strategy[which(schedule$strategy == 1)] <- 'include'
+        }
+        
+        
+      }
+    }
+  }
+  # when order is not provided (correctly) the strategy values will not be set
+  
+  # if the callers wants subtask trial numbers as well, they can be added here:
+  if (addsubtasktrialnums) {
+    
+    schedule$subtask_trial <- 0
+    
+    for (subtask_no in unique(schedule$subtask)) {
+      
+      idx <- which(schedule$subtask == subtask_no)
+      
+      schedule$subtask_trial[idx] <- c(1:length(idx))
+      
+    }
+    
+  }
+  
+  # return the current schedule
+  
+  return(schedule)
   
 }
