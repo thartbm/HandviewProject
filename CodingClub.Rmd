@@ -3,7 +3,14 @@ title: "SMCL Coding Club"
 output: html_notebook
 ---
 
+```{r}
+
+```
+
+
 # Overview
+
+When people make reaches they use many signals to determine wher etheir hand is. This includes efferent-based predictions of hand location as well as afferent proprioceptive signals. Based on context people will rely more on predictions, and efferent signals to determine where their hand is. Here we trained people in the same perturbation with different types of information about the rotation. We test their explicit strategies to gauge if these contexts had effect on learning and then compare active and passive hand localization which respectively do or do not include efferent information. We expect groups with more explicit adaptation to rely on predictions more in their hand localization.
 
 In this experiment participants adapted to a 30 degree rotation, with various kinds of feedback:
 
@@ -27,16 +34,67 @@ Both collected in the aligned and rotated phase of the task.
 
 ## Analysis plan
 
-- for reaches: calculate reach deviation at 1/4 of the reach
-- hand localization: no yet
+
+### Training
+
+Did participants learn? Maybe we exclude some.
+
+Did all groups learn to the same extent?
+
+Did all groups learn equally quickly?
+
+### No-cursors
+
+There were two types of open-loop reaches. With or without strategy.
+
+In groups with a difference between these two, there is definitely a strategy.
+
+Perhaps the difference between with and without strategy no-cursor reaches can be used as a measure of strategy.
+
+### Hand localization
+
+Is there a difference between active and passive localization?
+
+Is this different in the different conditions?
+
+# Setup
+
+Get necessary packages:
+
+```{r}
+library('remotes')
+ip <- installed.packages()
+if ('Reach' %in% ip[,'Package']) {
+  if (ip[which(ip[,'Package'] == 'Reach'),'Version'] < "2023.12.17") {
+    remotes::install_github('thartbm/Reach')
+  }
+} else {
+  remotes::install_github('thartbm/Reach')
+}
+```
+
+Synch the R environment?
+
+
+Source project code:
+
+```{r}
+# download and handle data:
+source('R/data.R')
+# scripts for training reaches:
+source('R/reaches.R')
+```
+
+
 
 # Reach Training
 
 1. Calculate baseline (trials 31 - 45: 5 reaches per target)
+
+
+
 2. Correct rotated reaches for baseline deviations
 3. Plot a learning curve
 
 (4. fit an exponential to the learning curve)
 
-  
-  
