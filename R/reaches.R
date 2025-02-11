@@ -90,3 +90,4 @@ getReachDeviation <- function(df) {
            'reachdeviation_deg'=reachdev))
   
 }
+
