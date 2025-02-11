@@ -1,3 +1,4 @@
+
 getParticipantTraining <- function(group, participant) {
   
   AL_file <- sprintf('data/%s/%s/%s_aligned_training.csv', group, participant, participant)
