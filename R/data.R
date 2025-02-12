@@ -14,14 +14,21 @@ getData <- function() {
                                                         'cursorjump_rotated.zip',
                                                         'demographics.csv',
                                                         'schedule.csv'
-                                                                 ),
-                                            'documents/' = c('explicit_task_order.png') 
+                                                                 )
                                             ),
                          folder      = 'data/',
                          overwrite   = TRUE,
                          unzip       = TRUE,
                          removezips  = TRUE)
   
+  Reach::downloadOSFdata(repository  = 'm5dt4',
+                         filelist    = list(
+                           'documents/' = c('explicit_task_order.png') 
+                         ),
+                         folder      = 'doc/',
+                         overwrite   = TRUE,
+                         unzip       = TRUE,
+                         removezips  = TRUE)
 }
 
 
