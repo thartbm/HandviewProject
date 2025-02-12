@@ -1,6 +1,9 @@
 ---
 title: "SMCL Coding Club"
-output: html_notebook
+output:
+  html_notebook: default
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r}
@@ -11,58 +14,9 @@ output: html_notebook
 
 When people make reaches they use many signals to determine where their hand is. This includes efferent-based predictions of hand location as well as afferent proprioceptive signals. Based on context people will rely more on predictions, and efferent signals to determine where their hand is. Here we trained people in the same perturbation with different types of information about the rotation. We test their explicit strategies to gauge if these contexts had effect on learning and then compare active and passive hand localization which respectively do or do not include efferent information. We expect groups with more explicit adaptation to rely on predictions more in their hand localization.
 
-# Overview of experiment and data
+## Setup
 
-In this experiment participants adapted to a 30 degree rotation, with various kinds of feedback:
-
-1. Regular cursor feedback: "control"
-2. Cursorjump feedback , where the rotation is shown at 1/3rd the reach on each training trial: "cursorjump"
-3. A group where both the cursor and hand were visible during training1' "handview"
-4. A group that was explained the rotation beforehand: "instructed"
-
-All reach were to targets at 45, 90 and 135 degrees.
-
-
-
-## Data
-
-There are several kind of data the we could analyse:
-
-1. Training reaches
-2. No-cursor reaches
-3. Passive localization
-4. Active localization
-
-Both collected in the aligned and rotated phase of the task.
-
-## Analysis plan
-
-
-### Training
-
-Did participants learn? Maybe we exclude some.
-
-Did all groups learn to the same extent?
-
-Did all groups learn equally quickly?
-
-### No-cursors
-
-There were two types of open-loop reaches. With or without strategy.
-
-In groups with a difference between these two, there is definitely a strategy.
-
-Perhaps the difference between with and without strategy no-cursor reaches can be used as a measure of strategy.
-
-### Hand localization
-
-Is there a difference between active and passive localization?
-
-Is this different in the different conditions?
-
-Can this potentially be explained by different levels of explicit adaptation in the different conditions?
-
-# Setup
+Before any other steps, we make sure the machine is ready to run the code for the project. We install dependencies, and download the data.
 
 The R environment for the is project is recorded in the renv.lock file that is part of this project. The package `renv` itself should have been activated when opening the .Rprofile associated with this R Studio project. This should allow you to restore the exact set of packages used for this project (hopefully only once):
 
@@ -93,15 +47,77 @@ source('R/data.R')
 source('R/reaches.R')
 ```
 
+### Download data
+
+```{r eval=F}
+getDate()
+```
+
+# Overview of experiment and data
+
+In this experiment participants adapted to a 30 degree rotation, with various kinds of feedback:
+
+1. Regular cursor feedback: "control"
+2. Cursorjump feedback , where the rotation is shown at 1/3rd the reach on each training trial: "cursorjump"
+3. A group where both the cursor and hand were visible during training1' "handview"
+4. A group that was explained the rotation beforehand: "instructed"
+
+All reach were to targets at 45, 90 and 135 degrees.
+
+## Data
+
+There are several kind of data the we could analyse:
+
+1. Training reaches
+2. No-cursor reaches
+3. Passive localization
+4. Active localization
+
+Both collected in the aligned and rotated phase of the task. With repetitions of each. See illustration below.
+
+![Schedule of task order for all conditions.](doc/explicit_task_order.png){width=100%}
+
+
+## Analysis plan
+
+We want to know if the effect of efference copies on hand localization decreases when perturbations are more externally attributed (or perhaps when there is a larger explicit strategy).
+
+### Training
+
+Although not the main variable of interest, we do need to first check the training data:
+
+- Did participants learn? Maybe we exclude some. If there is no learning, we do not get any hand localization shifts either, or at least we can't rely on them.
+- Did all groups learn to the same extent? If they do, we can directly compare the size of other variables as well, if not, we'll have to rethink the rest of the analyses.
+- Did all groups learn equally quickly? Perhaps this is not that important for our main questions, but it might be interesting to check.
+
+### No-cursors
+
+The manipulations might have an effect on implicit adaptation, here measured as without strategy no-cursor reach deviations. They should have an effect on explicit adaptation, which is only indirectly available in this project as the difference between with and without strategy no-cursor reach deviations.
+
+- How do without-strategy no-cursor reach deviations vary with condition? If they do, there is an effect on implicit adaptation.
+- Are there differences between with- and without strategy no-cursor reach deviations? Where we find any such difference, there is definitely a strategy.
+- We will - for this example project - use the difference between the two kinds of no-cursor reach deviation as an estimate of explicit strategy, even though we do not really agree with this measure anymore. How does that look in each condition?
+
+### Hand localization
+
+Here we come to the main questions. We know that visuomotor adaptation also changes where we estimate the location of our hand within the workspace. We've shown before that there is a difference between active and passive hand localization. Active hand localization depends on predictions using an efference signal. These predictions may change depending on how we learn to adapt. For example, when adaptation more explicit or more externally attributed (or likely both, in the cursorjump and handview groups as compared to the control group). If hand localization is an implicit process, then the absence or presence of a strategy alone might not affect the predictions we (unconsciously) make, and active localization could still have increased hand localization shifts whether or not there is a strategy. However, external error attribution may (will) also occur implicitly if it is clear enough, along with explicit strategies. Nevertheless, in that case, predictions may not be based on efferent signals regardless of whether they were available.
+
+To investigate all of this, we do several checks and tests. 
+
+- Is there a difference between active and passive localization? At least in some of the groups there should be, e.g. in the control group.
+- Is this different in the different conditions? Do some conditions (cursorjump, handview) not show a difference between active and passive hand localization shifts.
+- Can this potentially be explained by different levels of explicit adaptation in the different conditions? Or potentially by external error attribution?
 
 # Reach Training
 
 1. Calculate baseline (trials 31 - 45: 5 reaches per target)
 
-
-
 2. Correct rotated reaches for baseline deviations
+
 3. Plot a learning curve
 
-(4. fit an exponential to the learning curve)
+4. Determine the asymptotic level of adaptation. And perhaps the rate of learning.
 
+Do we just take the average reach deviation at the end of the 90 trial block, or do we fit an exponential curve?
+
+(5. Check if the top-up blocks are all the same as well?)
