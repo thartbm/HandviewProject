@@ -21,7 +21,7 @@ getGroupTraining <- function(group) {
   
   # print(participants)
   
-  for (participant in participants[c(1:3)]) {
+  for (participant in participants[1]) {
     
     participant_df <- getParticipantTraining( group       = group,
                                               participant = participant )
@@ -43,14 +43,33 @@ getBaseline <- function(df) {
   
   trialnos <- unique(df$trial_num)
   
+  outdf <- NA
+  
   for (trial in trialnos) {
     
     tdf <- df[which(df$trial_num == trial),]
     
     reachdev <- getReachDeviation(tdf)
-    print(reachdev)
+    
+    reachdev <- data.frame(t(data.frame(reachdev)))
+    
+    if (is.data.frame(outdf)) {
+      cat('is data frame\n')
+      outdf <- rbind(outdf, reachdev)
+    } else {
+      outdf <- reachdev
+    }
+    
+    
+    # print( t(data.frame(reachdev)) )
+    
+    # print(class(outdf))
+    
+    # print(reachdev)
     
   }
+  
+  print(outdf)
   
 }
 
@@ -83,7 +102,7 @@ getReachDeviation <- function(df) {
   
   reachdev <- (atan2(norm_sample[2], norm_sample[1]) / pi) * 180
   
-  print(reachdev)
+  # print(reachdev)
   
   return(c('trial_num' = df$trial_num[1],
            'targetangle_deg'=target,
