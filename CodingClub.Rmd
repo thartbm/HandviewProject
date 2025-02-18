@@ -30,7 +30,7 @@ Some of the code uses functions from our lab's `Reach` package which is not on a
 library('remotes')
 ip <- installed.packages()
 if ('Reach' %in% ip[,'Package']) {
-  if (ip[which(ip[,'Package'] == 'Reach'),'Version'] < "2023.12.17") {
+  if (ip[which(ip[,'Package'] == 'Reach'),'Version'] < "2025.02.16") {
     remotes::install_github('thartbm/Reach')
   }
 } else {
@@ -121,3 +121,4 @@ To investigate all of this, we do several checks and tests.
 Do we just take the average reach deviation at the end of the 90 trial block, or do we fit an exponential curve?
 
 (5. Check if the top-up blocks are all the same as well?)
+
