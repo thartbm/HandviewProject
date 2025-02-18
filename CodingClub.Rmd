@@ -50,7 +50,7 @@ source('R/reaches.R')
 ### Download data
 
 ```{r eval=F}
-getDate()
+getData()
 ```
 
 # Overview of experiment and data
@@ -111,6 +111,11 @@ To investigate all of this, we do several checks and tests.
 # Reach Training
 
 1. Calculate baseline (trials 31 - 45: 5 reaches per target)
+
+
+## remove outliers
+
+## use more trials to estimate baseline bias
 
 2. Correct rotated reaches for baseline deviations
 
