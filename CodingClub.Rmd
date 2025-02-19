@@ -2,12 +2,14 @@
 title: "SMCL Coding Club"
 output:
   html_notebook: default
+  html_document:
+    df_print: paged
   pdf_document: default
   word_document: default
 ---
 
 ```{r}
-
+#
 ```
 
 # Pre-amble
@@ -18,15 +20,19 @@ When people make reaches they use many signals to determine where their hand is.
 
 Before any other steps, we make sure the machine is ready to run the code for the project. We install dependencies, and download the data.
 
-The R environment for the is project is recorded in the renv.lock file that is part of this project. The package `renv` itself should have been activated when opening the .Rprofile associated with this R Studio project. This should allow you to restore the exact set of packages used for this project (hopefully only once):
+The R environment for the is project is recorded in the renv.lock file that is part of this project. The code for `renv` itself should have been activated when opening the .Rprofile associated with this R Studio project, since it's embedded in the project. This should allow you to restore the exact set of packages used for this project.
+
+**This chunk does not run automatically because it can be very time consuming. Run it manually to restore the R environment:**
 
 ```{r eval=F}
 renv::restore()
 ```
 
-Some of the code uses functions from our lab's `Reach` package which is not on an official package server, but can be installed from GitHub, using `remotes`. We do that here:
+Some of the code uses functions from our lab's `Reach` package which is not on an official package server, but can be installed from GitHub, using `remotes`.
 
-```{r}
+**We do that below, but this chunk does not run by default since it's not necssary. Run manually to install the package.**
+
+```{r eval=F}
 library('remotes')
 ip <- installed.packages()
 if ('Reach' %in% ip[,'Package']) {
@@ -49,6 +55,10 @@ source('R/reaches.R')
 
 ### Download data
 
+Up to now, we prepared the machine by getting code ready. The first bit of code we run downloads the data, which is perhaps also a step in getting the machine ready for useful stuff. The data is stored on this OSF repository: [SMCL coding club](https://osf.io/m5dt4/).
+
+**The code below does not run by default, to reduce traffic to OSF.io. Run the chunk manually to download the data.**
+
 ```{r eval=F}
 getData()
 ```
@@ -59,7 +69,7 @@ In this experiment participants adapted to a 30 degree rotation, with various ki
 
 1. Regular cursor feedback: "control"
 2. Cursorjump feedback , where the rotation is shown at 1/3rd the reach on each training trial: "cursorjump"
-3. A group where both the cursor and hand were visible during training1' "handview"
+3. A group where both the cursor and hand were visible during training: "handview"
 4. A group that was explained the rotation beforehand: "instructed"
 
 All reach were to targets at 45, 90 and 135 degrees.
@@ -109,6 +119,40 @@ To investigate all of this, we do several checks and tests.
 - Can this potentially be explained by different levels of explicit adaptation in the different conditions? Or potentially by external error attribution?
 
 # Reach Training
+
+## Reach deviations
+
+In order to calculate a reach deviation, we can use the `atan2()` function, which takes a Y and X coordinate (note the order!), and returns the angle of a line going from the origin of the coordinate system (0,0) to the point (X,Y) in radians. The issue with this function is that its' output switches from $+\pi$ to $-\pi$ exactly to the left of the origin of the coordinate system. So a small change in position, gives almost the maximum change in direction. Especially if we have targets close to this switch point, then even with accurate reaches, performance could seem to be extremely bad. We need a solution to this.
+
+In order to avoid this "switch-point" in the output, we rotate reach samples (either the whole trajectory, or single points on the reach, whatever we're working with) by -1 times the direction of the target. All reaches can then be seen as if the target were at 0°. And applying `atan2()` to such rotated trajectories, immediately gives the deviation from the target, so no further steps are necessary.
+
+This rotation is most easily achieved by multiplying the trajectory samples with a [rotation matrix](https://en.wikipedia.org/wiki/Rotation_matrix) $R$. This is handled in the `getReachDeviation()` function, that's defined in the file `R\reaches.R`.
+
+First we, need to convert the target angle (usually stored in degrees) to radians:
+
+$$ \theta = \pi(-target/180) $$
+
+Then we can use that to construct $R$:
+
+$$ R = \begin{bmatrix}
+cos(\theta) & -sin(\theta) \\
+sin(\theta) & cos(\theta) \\
+\end{bmatrix} $$
+
+We get our set of trajectory samples, a vector $v$:
+
+$$v = \begin{bmatrix}
+x \\
+y \\
+\end{bmatrix} $$
+
+And multiply it with the rotation matrix:
+
+$$\bar{v} = Rv $$
+This new vector $\bar{v}$ now contains the rotated trajectory samples, and we can apply `atan2()` to them.
+
+> Note that $x$ and $y$ can be vectors, such that $v$ and $\bar{v}$ are not column matrices, but rectangular. This can be used to optimize the code for speed. You would first select a sample from each reach with the same target, add the coordinates to a matrix. Then multiply all of them with the same rotation matrix. This means that you only construct the rotation matrix for each target once, and all the matrix multiplication is done at the same time - with fewer loops, and less time spent in R interpretation. The code will be more complicated though, so we will not do this here.
+
 
 1. Calculate baseline (trials 31 - 45: 5 reaches per target)
 
