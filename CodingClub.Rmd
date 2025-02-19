@@ -117,7 +117,6 @@ To investigate all of this, we do several checks and tests.
 - remove outliers from baseline reach deviations
 - estimate baseline biases separately for each target
 
-
 2. Correct rotated reaches for baseline deviations
 
 3. Plot a learning curve
