@@ -165,9 +165,30 @@ This new vector $\bar{v}$ now contains the rotated trajectory samples, and we ca
 
 3. Plot a learning curve
 
+
+```{r fig.width=8, fig.height=6}
+plotTraining()
+```
+
+
+
 4. Determine the asymptotic level of adaptation. And perhaps the rate of learning.
 
 Do we just take the average reach deviation at the end of the 90 trial block, or do we fit an exponential curve?
 
 (5. Check if the top-up blocks are all the same as well?)
+
+
+
+# Plot all figures
+
+```{r}
+
+for (target in c('pdf')) {
+
+  plotTraining(target=target)
+
+}
+
+```
 
