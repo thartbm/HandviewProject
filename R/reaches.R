@@ -1,4 +1,26 @@
 
+# training reach deviations ----
+
+getAllTraining <- function() {
+  
+  groups <- c('control', 'cursorjump', 'handview')
+  
+  for (group in groups) {
+    
+    df <- getGroupTraining(group)
+    
+    filename <- sprintf('data/%s/%s_training_reachdevs.csv', group, group)
+    
+    write.csv( df,
+               filename,
+               row.names=FALSE)
+    
+  }
+  
+}
+
+
+
 getParticipantTraining <- function(group, participant) {
   
   AL_file <- sprintf('data/%s/%s/%s_aligned_training.csv', group, participant, participant)
@@ -227,3 +249,8 @@ baselineCorrection <- function(baseline=baseline, rotated=rotated) {
   return(rotated)
 
 }
+
+
+# no cursor reach deviations ----
+
+
