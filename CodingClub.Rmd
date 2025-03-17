@@ -195,8 +195,6 @@ Bayesian statistics:
 - ANOVA, like above
 - or F-test
 
-
-
 We do a Bayesian analysis on the extent of learning (block 4 from above, trials 76-90):
 
 ```{r}
