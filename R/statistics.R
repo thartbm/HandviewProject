@@ -29,7 +29,7 @@ getANOVAdata <- function() {
     
   }
   
-  aov_data <- aov_data[which(aov_data$participant != '6468c3'),]
+  # aov_data <- aov_data[which(aov_data$participant != '6468c3'),]
   
   aov_data$group <- as.factor(aov_data$group)
   aov_data$block <- as.factor(aov_data$block)
@@ -59,7 +59,7 @@ learningCurveBayes <- function() {
   
   aov_data <- getANOVAdata()
   
-  # baov <- BayesFactor::anovaBF(reachdeviation_deg ~ group + block,
+  # baov <- BayesFactor::anovaBF(reachdeviation_deg ~ group * block + participant,
   #                              data = aov_data,
   #                              whichRandom = "participant",
   #                              progress=FALSE)
@@ -67,12 +67,12 @@ learningCurveBayes <- function() {
   
   
   block3 <- aov_data[which(aov_data$block == 3),]
-  
+
   baov <- BayesFactor::anovaBF(reachdeviation_deg ~ group,
                                data = block3,
-                               whichRandom = "participant",
+                               # whichRandom = "participant",
                                progress=FALSE)
-  
+
   print(baov)
   
 }
