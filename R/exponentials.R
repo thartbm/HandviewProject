@@ -51,12 +51,7 @@ exponentialFit <- function(signal, timepoints=length(signal), gridpoints=11, gri
   
   
   
-  
-  # if (is.null(setN0)) {
-  #   X <- data.frame(searchgrid[order(MSE)[1:gridfits],])
-  # } else {
-  #   X <- data.frame('lambda'=searchgrid[order(MSE)[1:gridfits],])
-  # }
+
   
   # run optimx on the best starting positions:
   allfits <- do.call("rbind",
@@ -70,8 +65,6 @@ exponentialFit <- function(signal, timepoints=length(signal), gridpoints=11, gri
                             timepoints = timepoints,
                             signal     = signal
                             ) )
-  
-  print(allfits)
   
   # pick the best fit:
   win <- allfits[order(allfits$value)[1],]
