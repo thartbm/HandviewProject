@@ -1036,18 +1036,6 @@
       ],
       "Hash": "1f8c66528602fda4eef0c2e11eda5a57"
     },
-    "parallelly": {
-      "Package": "parallelly",
-      "Version": "1.43.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "parallel",
-        "tools",
-        "utils"
-      ],
-      "Hash": "ca40f736e4d2dc6981c1dc9d14ea3dcf"
-    },
     "pbapply": {
       "Package": "pbapply",
       "Version": "1.7-2",
