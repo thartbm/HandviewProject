@@ -135,6 +135,8 @@ bootStrapExponentials <- function(bootstraps=200) {
   # loop through groups
   for (group in c('control', 'cursorjump', 'handview')) {
     
+    cat('working on group: ', group, '\n')
+    
     # load the group reach training data:
     df <- read.csv(sprintf('data/%s/%s_training_reachdevs.csv', group, group),
                    stringsAsFactors = FALSE)
@@ -155,7 +157,9 @@ bootStrapExponentials <- function(bootstraps=200) {
     
     # write the fits to a file:
     outdf <- as.data.frame(t(a))
-    write.csv(outdf, file=sprintf('data/%s/%s_expfits.csv',group,group))
+    write.csv(outdf,
+              file=sprintf('data/%s/%s_expfits.csv',group,group),
+              row.names = FALSE)
     
   }
   
