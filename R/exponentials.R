@@ -163,5 +163,4 @@ bootStrapExponentials <- function(bootstraps=200) {
   parallel::stopCluster(clust)
   
   
-  
 }
