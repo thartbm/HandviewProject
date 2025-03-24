@@ -99,13 +99,13 @@
     },
     "R6": {
       "Package": "R6",
-      "Version": "2.5.1",
+      "Version": "2.6.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "470851b6d5d0ac559e9d01bb352b4021"
+      "Hash": "d4335fe7207f1c01ab8c41762f5840d4"
     },
     "RColorBrewer": {
       "Package": "RColorBrewer",
@@ -157,14 +157,14 @@
     },
     "Reach": {
       "Package": "Reach",
-      "Version": "2024.10.06",
+      "Version": "2025.03.13",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "Reach",
       "RemoteUsername": "thartbm",
       "RemoteRef": "HEAD",
-      "RemoteSha": "f2bcd72c4470c5bf3bd5c06750f00b44f0aed217",
+      "RemoteSha": "d0143ea7d7e5ff66bbc4efd996d791a7dc8e6f64",
       "Requirements": [
         "R",
         "grDevices",
@@ -175,7 +175,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "fd803e91ffee26372d10352268b48af2"
+      "Hash": "74e837828eb6d31514a1d2ec7a0870c2"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -353,14 +353,14 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "3.6.3",
+      "Version": "3.6.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "b21916dd77a27642b447374a5d30ecf3"
+      "Hash": "491c34d3d9dd0d2fe13d9f278bb90795"
     },
     "coda": {
       "Package": "coda",
@@ -438,13 +438,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "6.2.0",
+      "Version": "6.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "b580cbb010099fd990df6bfe44459e1a"
+      "Hash": "d65efa2a203bb99faa78690eee928f30"
     },
     "deSolve": {
       "Package": "deSolve",
@@ -736,13 +736,13 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.9",
+      "Version": "1.9.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "methods"
       ],
-      "Hash": "4e993b65c2c3ffbffce7bb3e2c6f832b"
+      "Hash": "c72fbb0e7ee73ea7497ffeebe44f0d91"
     },
     "knitr": {
       "Package": "knitr",
@@ -894,13 +894,13 @@
     },
     "mime": {
       "Package": "mime",
-      "Version": "0.12",
+      "Version": "0.13",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "tools"
       ],
-      "Hash": "18e9c28c1d3ca1560ce30658b22ce104"
+      "Hash": "0ec19f34c72fab674d8f2b4b1c6410e1"
     },
     "minqa": {
       "Package": "minqa",
@@ -968,10 +968,10 @@
     },
     "nloptr": {
       "Package": "nloptr",
-      "Version": "2.1.1",
+      "Version": "2.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "27550641889a3abf3aec4d91186311ec"
+      "Hash": "dd6975473dd4c9b96e9be93b796b9c1a"
     },
     "nnet": {
       "Package": "nnet",
@@ -997,13 +997,13 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.3.1",
+      "Version": "2.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "askpass"
       ],
-      "Hash": "37a7f0abce0349f5950ce49f38c7626b"
+      "Hash": "bc54d87ebf858b28de18df4bca6528d3"
     },
     "optimx": {
       "Package": "optimx",
@@ -1035,6 +1035,18 @@
         "tibble"
       ],
       "Hash": "1f8c66528602fda4eef0c2e11eda5a57"
+    },
+    "parallelly": {
+      "Package": "parallelly",
+      "Version": "1.43.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "parallel",
+        "tools",
+        "utils"
+      ],
+      "Hash": "ca40f736e4d2dc6981c1dc9d14ea3dcf"
     },
     "pbapply": {
       "Package": "pbapply",
@@ -1118,7 +1130,7 @@
     },
     "purrr": {
       "Package": "purrr",
-      "Version": "1.0.2",
+      "Version": "1.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1129,7 +1141,7 @@
         "rlang",
         "vctrs"
       ],
-      "Hash": "1cba04a4e9414bdefc9dcaa99649a8dc"
+      "Hash": "cc8b5d43f90551fa6df0a6be5d640a4f"
     },
     "quantreg": {
       "Package": "quantreg",
