@@ -25,7 +25,29 @@ exponentialMSE <- function(par, signal, timepoints=c(0:(length(signal)-1)) ) {
 }
 
 
-exponentialFit <- function(signal, timepoints=length(signal), gridpoints=11, gridfits=10, asymptoteRange=NULL) {
+exponentialFit <- function(participants=NULL, df, timepoints=length(signal), gridpoints=4, gridfits=4, asymptoteRange=NULL) {
+  
+  
+  # select relevant participants
+  subdf <- NA
+  
+  for (participant in participants) {
+    
+    pdf <- df[which(df$participant == participant),]
+    
+    if (is.data.frame(subdf)) {
+      subdf <- rbind(subdf, pdf)
+    } else {
+      subdf <- pdf
+    }
+    
+  }
+  
+  agdf <- aggregate(reachdeviation_deg ~ trial_num, data=subdf, FUN=mean, na.rm=TRUE)
+  signal <- agdf$reachdeviation_deg
+  timepoints=length(signal)
+  
+  
   
   # set the search grid:
   parvals <- seq(1/gridpoints/2,1-(1/gridpoints/2),1/gridpoints)
@@ -40,7 +62,7 @@ exponentialFit <- function(signal, timepoints=length(signal), gridpoints=11, gri
                             'N0'     = parvals * diff(asymptoteRange) + asymptoteRange[1] )
   
   # evaluate starting positions:
-  MSE <- apply(searchgrid, FUN=exponentialMSE, MARGIN=c(1), signal=signal, timepoints=timepoints)
+  MSE <- apply(searchgrid, FUN=Reach::exponentialMSE, MARGIN=c(1), signal=signal, timepoints=timepoints)
   
   
   
@@ -58,7 +80,7 @@ exponentialFit <- function(signal, timepoints=length(signal), gridpoints=11, gri
                      apply( data.frame(searchgrid[order(MSE)[1:gridfits],]),
                             MARGIN=c(1),
                             FUN=optimx::optimx,
-                            fn=exponentialMSE,
+                            fn=Reach::exponentialMSE,
                             method     = 'L-BFGS-B',
                             lower      = lo,
                             upper      = hi,
@@ -80,22 +102,65 @@ exponentialFit <- function(signal, timepoints=length(signal), gridpoints=11, gri
 # fit exponential to learning curves -----
 
 
-learningExponentials <- function() {
+groupLearningExponentials <- function() {
   
-  for (group in c('control', 'cursorjump', 'handview')[1]) {
+  # loop through groups
+  for (group in c('control', 'cursorjump', 'handview')) {
     
-    
+    # load the group reach training data:
     df <- read.csv(sprintf('data/%s/%s_training_reachdevs.csv', group, group),
                    stringsAsFactors = FALSE)
     
+    # fit exponential:
+    exp_par <- exponentialFit( participants = unique(df$participant), df=df)
     
-    adf <- aggregate(reachdeviation_deg ~ trial_num, data=df, FUN=mean, na.rm=TRUE)
-    
-    exp_par <- exponentialFit( signal = adf$reachdeviation_deg)
-    
+    # print best parameters for now:
     print(exp_par)
     
   }
+  
+}
+
+
+bootStrapExponentials <- function(bootstraps=200) {
+  
+  # set up a cluster:
+  ncores <- parallel::detectCores()
+  clust  <- parallel::makeCluster(max(c(1,floor(ncores*0.80))))
+  # clust  <- parallel::makeCluster(2)
+  
+  parallel::clusterEvalQ(cl=clust, expr="source('R/exponentials.R')")
+  
+  
+  # loop through groups
+  for (group in c('control', 'cursorjump', 'handview')) {
+    
+    # load the group reach training data:
+    df <- read.csv(sprintf('data/%s/%s_training_reachdevs.csv', group, group),
+                   stringsAsFactors = FALSE)
+    
+    # create matrix of randomly sampled participants to bootstrap across participants:
+    participants <- unique(df$participant)
+    BSparticipants <- matrix( sample(participants,
+                                     size=bootstraps*length(participants),
+                                     replace=TRUE),
+                              nrow=bootstraps)
+    
+    # fit an exponential to bootstrapped sets of participants' data:
+    a <- parallel::parApply(cl = clust,
+                            X = BSparticipants,
+                            MARGIN = 1,
+                            FUN = exponentialFit,
+                            df = df)
+    
+    # write the fits to a file:
+    outdf <- as.data.frame(t(a))
+    write.csv(outdf, file=sprintf('data/%s/%s_expfits.csv',group,group))
+    
+  }
+  
+  # stop the cluster and free the cores for other tasks:
+  parallel::stopCluster(clust)
   
   
 }
