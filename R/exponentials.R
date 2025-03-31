@@ -8,7 +8,12 @@ exponentialModel <- function(par, timepoints) {
     timepoints <- c(0:(timepoints-1))
   }
   
+  # print(par)
+  # print(timepoints)
+  
   output = par['N0'] - ( par['N0'] * (1-par['lambda'])^timepoints )
+  
+  # print(output)
   
   return(data.frame(trial=timepoints,
                     output=output))
@@ -62,7 +67,7 @@ exponentialFit <- function(participants=NULL, df, timepoints=length(signal), gri
                             'N0'     = parvals * diff(asymptoteRange) + asymptoteRange[1] )
   
   # evaluate starting positions:
-  MSE <- apply(searchgrid, FUN=Reach::exponentialMSE, MARGIN=c(1), signal=signal, timepoints=timepoints)
+  MSE <- apply(searchgrid, FUN=exponentialMSE, MARGIN=c(1), signal=signal, timepoints=timepoints)
   
   
   
@@ -80,7 +85,7 @@ exponentialFit <- function(participants=NULL, df, timepoints=length(signal), gri
                      apply( data.frame(searchgrid[order(MSE)[1:gridfits],]),
                             MARGIN=c(1),
                             FUN=optimx::optimx,
-                            fn=Reach::exponentialMSE,
+                            fn=exponentialMSE,
                             method     = 'L-BFGS-B',
                             lower      = lo,
                             upper      = hi,
@@ -122,20 +127,18 @@ groupLearningExponentials <- function() {
 }
 
 
-bootStrapExponentials <- function(bootstraps=200) {
+bootstrapExponentials <- function(bootstraps=200) {
   
   # set up a cluster:
   ncores <- parallel::detectCores()
   clust  <- parallel::makeCluster(max(c(1,floor(ncores*0.80))))
-  # clust  <- parallel::makeCluster(2)
   
-  parallel::clusterEvalQ(cl=clust, expr="source('R/exponentials.R')")
-  
+  parallel::clusterEvalQ(cl=clust, source('R/exponentials.R'))
   
   # loop through groups
   for (group in c('control', 'cursorjump', 'handview')) {
     
-    cat('working on group: ', group, '\n')
+    cat('working on group:', group, '\n')
     
     # load the group reach training data:
     df <- read.csv(sprintf('data/%s/%s_training_reachdevs.csv', group, group),
@@ -166,5 +169,26 @@ bootStrapExponentials <- function(bootstraps=200) {
   # stop the cluster and free the cores for other tasks:
   parallel::stopCluster(clust)
   
+}
+
+
+# analyse bootstrapped exponentials -----
+
+analyseExponentials <- function() {
+  
+  # loop through groups
+  for (group in c('control', 'cursorjump', 'handview')) {
+    
+    # load the bootstrapped exponential fits:
+    expfits <- read.csv(sprintf('data/%s/%s_expfits.csv', group, group),
+                        stringsAsFactors = FALSE)
+    
+    # calculate the 95% CI for lambda and N0
+    lambdaCI <- quantile(expfits$lambda, c(0.025, 0.50, 0.975))
+    N0CI     <- quantile(expfits$N0, c(0.025, 0.50, 0.975))
+    
+    cat(sprintf('lambda 95%% CI for %s: mean=%0.3f, range: %0.3f, %0.3f\n', group, lambdaCI[2], lambdaCI[1], lambdaCI[3]))
+    
+  }
   
 }
