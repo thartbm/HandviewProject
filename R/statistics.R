@@ -1,4 +1,8 @@
 
+# learning curve statistics ----
+
+## regular NHST / Anova ----
+
 getANOVAdata <- function() {
   
   aov_data <- NA
@@ -54,6 +58,7 @@ learningCurveANOVA <- function() {
   
 }
 
+## Bayesian statistics ---- 
 
 learningCurveBayes <- function() {
   
@@ -74,5 +79,28 @@ learningCurveBayes <- function() {
                                progress=FALSE)
 
   print(baov)
+  
+}
+
+
+
+## analyse bootstrapped exponentials -----
+
+analyseExponentials <- function() {
+  
+  # loop through groups
+  for (group in c('control', 'cursorjump', 'handview')) {
+    
+    # load the bootstrapped exponential fits:
+    expfits <- read.csv(sprintf('data/%s/%s_expfits.csv', group, group),
+                        stringsAsFactors = FALSE)
+    
+    # calculate the 95% CI for lambda and N0
+    lambdaCI <- quantile(expfits$lambda, c(0.025, 0.50, 0.975))
+    N0CI     <- quantile(expfits$N0, c(0.025, 0.50, 0.975))
+    
+    cat(sprintf('lambda 95%% CI for %s: mean=%0.3f, range: %0.3f, %0.3f\n', group, lambdaCI[2], lambdaCI[1], lambdaCI[3]))
+    
+  }
   
 }
