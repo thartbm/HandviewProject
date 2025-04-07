@@ -191,7 +191,7 @@ Bayesian statistics:
 - ANOVA, like above
 - or F-test
 
-We do a Bayesian analysis on the extent of learning (block 4 from above, trials 76-90):
+We do a Bayesian analysis on the extent of learning (block 3 from above, trials 76-90):
 
 ```{r}
 learningCurveBayes()
@@ -203,13 +203,30 @@ Exponential curve fitting:
 - asymptote,
 - rate of learning
 
+```{r fig.width=8, fig.height=6}
+plotFittedExponentials()
+```
 
+Perhaps there control group learns a bit slower than the other groups. Let's check the 95% Confidence Intervals.
 
+```{r}
+analyseExponentials()
+```
 
+So yes, the control group learns a little slower than the other two groups.
 
-Do we just take the average reach deviation at the end of the 90 trial block, or do we fit an exponential curve?
+# No-cursor reaches
 
-(5. Check if the top-up blocks are all the same as well?)
+There are two kinds no-cursor reach blocks: with and without strategy. Without strategy is supposed to measure classic implicit adaptation, while with strategy is supposed to cpature both implicit and explicit adapation.
+
+- implicit: without-strategy no-cursor reaches
+- explicit: with-strategy no-cursor reaches minus the without-strategy no-cursor reaches
+
+We will use all of the no-cursor reach deviations. Baseline both the with and without strategy no-cursor using the aligned data. Then plot te group averages with confidence intervals, and the individual data.
+
+```{r}
+plotNoCursors()
+```
 
 
 
@@ -220,6 +237,8 @@ Do we just take the average reach deviation at the end of the 90 trial block, or
 for (target in c('pdf')) {
 
   plotTraining(target=target)
+  plotExponentials(target=target)
+  plotNoCursors(target=target)
 
 }
 
