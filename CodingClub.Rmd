@@ -237,7 +237,7 @@ plotNoCursors()
 for (target in c('pdf')) {
 
   plotTraining(target=target)
-  plotExponentials(target=target)
+  plotFittedExponentials(target=target)
   plotNoCursors(target=target)
 
 }
