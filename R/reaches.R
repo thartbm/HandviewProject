@@ -95,15 +95,21 @@ getGroupTraining <- function(group) {
   
 }
 
-getBaseline <- function(df) {
+getBaseline <- function(df, task='training') {
   
   schedule <- read.csv('data/schedule.csv', stringsAsFactors = F)
   subtasks <- unique(schedule[which(schedule$session == 'aligned' & schedule$task == 'training'),]$subtask)
   
-  trialnums <- c(31:45)
-  for (subtask in subtasks[c(2:length(subtasks))]) {
-    sttn <- schedule$trial_num[which(schedule$subtask == subtask)]
-    trialnums <- c(trialnums, sttn[7:9])
+  if (task == 'training') {
+    trialnums <- c(31:45)
+    for (subtask in subtasks[c(2:length(subtasks))]) {
+      sttn <- schedule$trial_num[which(schedule$subtask == subtask)]
+      trialnums <- c(trialnums, sttn[7:9])
+    }
+  }
+  if (task == 'nocursor') {
+    trialnums <- unique(df$trial_num)
+    # trialnums <- trialnums[which(trialnums < 108)]
   }
   
   # str(df)
@@ -137,9 +143,16 @@ getBaseline <- function(df) {
 }
 
 
-getRotatedLearning <- function(df) {
+getRotatedLearning <- function(df, task='training') {
   
-  trialnums <- c(1:90)
+  if (task == 'training') {
+    trialnums <- c(1:90)
+  }
+  
+  if (task == 'nocursor') {
+    trialnums <- unique(df$trial_num)
+    # trialnums <- trialnums[which(trialnums < 108)]
+  }
 
   df <- df[which(df$trial_num %in% trialnums),]
 
@@ -253,4 +266,94 @@ baselineCorrection <- function(baseline=baseline, rotated=rotated) {
 
 # no cursor reach deviations ----
 
+
+getAllNoCursors <- function() {
+  
+  groups <- c('control', 'cursorjump', 'handview')
+  
+  for (group in groups) {
+    
+    df <- getGroupNoCursors(group)
+    
+    filename <- sprintf('data/%s/%s_nocursors_reachdevs.csv', group, group)
+    
+    write.csv( df,
+               filename,
+               row.names=FALSE)
+    
+  }
+  
+}
+
+
+getParticipantNoCursors <- function(group, participant) {
+  
+  AL_file <- sprintf('data/%s/%s/%s_aligned_nocursor.csv', group, participant, participant)
+  RO_file <- sprintf('data/%s/%s/%s_rotated_nocursor.csv', group, participant, participant)
+  
+  AL_df <- read.csv( file = AL_file,
+                     stringsAsFactors = F)
+  RO_df <- read.csv( file = RO_file,
+                     stringsAsFactors = F)
+  
+  return( list('aligned'=AL_df,
+               'rotated'=RO_df) )
+  
+}
+
+
+getGroupNoCursors <- function(group) {
+  
+  participants <- groupParticipants(group = group)
+  
+  NoCursorReaches <- NA
+  
+  for (participant in participants) {
+    
+    participant_df <- getParticipantNoCursors( group       = group,
+                                               participant = participant )
+    
+    
+    baseline <- getBaseline( df = participant_df[['aligned']],
+                             task = 'nocursor')
+    
+
+    baseline <- removeOutliers(baseline, rotation = 0)
+
+    baseline <- aggregate(reachdeviation_deg ~ targetangle_deg, data=baseline, FUN=median, na.rm=TRUE)
+    
+
+    withStrategy <- participant_df[['rotated']][which(participant_df[['rotated']]$strategy == 1),]
+    withoutStrategy <- participant_df[['rotated']][which(participant_df[['rotated']]$strategy == 0),]
+    
+    withStrategy <- getRotatedLearning( df = withStrategy,
+                                        task = 'nocursor')
+    withoutStrategy <- getRotatedLearning( df = withoutStrategy,
+                                           task = 'nocursor')
+    
+    withStrategy <- removeOutliers(withStrategy, rotation = -30)
+    withoutStrategy <- removeOutliers(withoutStrategy, rotation = -30)
+
+    withStrategy <- baselineCorrection(baseline=baseline, rotated=withStrategy)
+    withoutStrategy <- baselineCorrection(baseline=baseline, rotated=withoutStrategy)
+    
+    withStrategy$participant <- participant
+    withoutStrategy$participant <- participant
+
+    withStrategy$strategy <- 1
+    withoutStrategy$strategy <- 0
+    
+    df <- rbind(withStrategy, withoutStrategy)
+    
+    if (is.data.frame(NoCursorReaches)) {
+      NoCursorReaches <- rbind(NoCursorReaches, df)
+    } else {
+      NoCursorReaches <- df
+    }
+  
+  }
+  
+  return(NoCursorReaches)
+  
+}
 
