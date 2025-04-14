@@ -227,7 +227,7 @@ We will use all of the no-cursor reach deviations. Baseline both the with and wi
 ```{r}
 plotNoCursors()
 ```
-So it seems there are is an effect of using a strategy in the no-cursor reaches, except in the control group group. Let's test this. First with an ANOVA, with post-hoc follow-ups:
+So it seems there is an effect of using a strategy in the no-cursor reaches, except in the control group. Let's test this. First with an ANOVA, with post-hoc follow-ups:
 
 ```{r}
 doNoCursorANOVA()
