@@ -59,7 +59,7 @@ getColors <- function() {
 
 # training plots -----
 
-plotTraining <- function(target='inline') {
+plotTraining <- function(target='inline',main=NULL) {
   
   
   setupFigureFile(target=target,
@@ -73,9 +73,13 @@ plotTraining <- function(target='inline') {
   colors <- getColors()
   
   plot(NA, NA,
-       main='learning', xlab='trial', ylab='reach deviation [°]',
+       main='', xlab='trial', ylab='reach deviation [°]',
        xlim=c(0,91), ylim=c(-10,40),
        ax=F, bty='n')
+  
+  if(!is.null(main)) {
+    title(main=main, adj=0, cex.main=2)
+  }
   
   lines(x=c(0,91),
         y=c(30,30),
@@ -153,36 +157,41 @@ plotTraining <- function(target='inline') {
 }
 
 
-plotFittedExponentials <- function(target='inline') {
+plotFittedExponentials <- function(target='inline', trials=c(1:90), main=NULL) {
   
   setupFigureFile(target=target,
                   width = 8,
                   height=6,
                   dpi=300,
-                  sprintf('doc/fig3_exponentials.%s', target))
+                  sprintf('doc/fig2b_exponentials.%s', target))
   
   groups <- c('control', 'cursorjump', 'handview')
   
   colors <- getColors()
   
+  xrange = c(min(trials)-1,max(trials)+1)
+  
   plot(NA, NA,
-       main='learning', xlab='trial', ylab='reach deviation [°]',
-       xlim=c(0,91), ylim=c(-10,40),
+       main='', xlab='trial', ylab='reach deviation [°]',
+       xlim=xrange, ylim=c(-10,40),
        ax=F, bty='n')
   
-  lines(x=c(0,91),
+  if(!is.null(main)) {
+    title(main=main, adj=0, cex.main=2)
+  }
+  lines(x=xrange,
         y=c(30,30),
         col='#999999',
         lw=2,
         lty=2)
-  lines(x=c(0,91),
+  lines(x=xrange,
         y=c(0,0),
         col='#999999',
         lw=2,
         lty=2)
   
   
-  timepoints <- seq(0,89,0.1)
+  timepoints <- seq(min(trials)-1,max(trials)-1,0.1)
   
   groups <- c('control', 'cursorjump', 'handview')
   
@@ -268,7 +277,7 @@ plotFittedExponentials <- function(target='inline') {
           bg='#FFFFFF')
   
   axis(side = 1,
-       at = c(1,30,60,90))
+       at = c(1,seq(30,max(trials),30)))
   axis(side = 2,
        at = c(0,10,20,30))
   
@@ -279,7 +288,7 @@ plotFittedExponentials <- function(target='inline') {
 }
 
 
-plotAsymptotes <- function(target='inline') {
+plotAsymptotes <- function(target='inline', main=NULL) {
   
   setupFigureFile(target=target,
                   width = 3,
@@ -292,9 +301,13 @@ plotAsymptotes <- function(target='inline') {
   colors <- getColors()
   
   plot(NA, NA,
-       main='', xlab='group', ylab='asymptote [°]',
-       xlim=c(0,4), ylim=c(-10,40),
+       main='', xlab='', ylab='asymptote [°]',
+       xlim=c(0.5,3.5), ylim=c(-10,40),
        ax=F, bty='n')
+  
+  if(!is.null(main)) {
+    title(main=main, adj=0, cex.main=2)
+  }
   
   lines(x=c(0,4),
         y=c(30,30),
@@ -337,16 +350,16 @@ plotAsymptotes <- function(target='inline') {
     
     grdens <- density(df$N0,
                       n=100,
-                      from=-10,
+                      from=5,
                       to=40)
     
     polygon( x = (3*c(grdens$y,0,0))+group_no+0.2,
-             y = c(seq(from=-10,to=40,length.out=100),40,-10),
+             y = c(seq(from=5,to=40,length.out=100),40,5),
              border=NA,
              col=coltr)
     
     lines(x = (3*c(grdens$y))+group_no+0.2,
-          y = seq(from=-10,to=40,length.out=100),
+          y = seq(from=5,to=40,length.out=100),
           col=colop)
     
     
@@ -355,7 +368,8 @@ plotAsymptotes <- function(target='inline') {
   
   axis(side = 1,
        at = c(1,2,3),
-       labels = groups)
+       labels = c('control','cursor\njump','hand\nview'),
+       las=2)
   axis(side = 2,
        at = c(0,10,20,30))
   
@@ -368,7 +382,7 @@ plotAsymptotes <- function(target='inline') {
 }
 
 
-plotLearningRates <- function(target='inline') {
+plotLearningRates <- function(target='inline', main=NULL) {
   
   setupFigureFile(target=target,
                   width = 3,
@@ -381,16 +395,20 @@ plotLearningRates <- function(target='inline') {
   colors <- getColors()
   
   plot(NA, NA,
-       main='', xlab='group', ylab='learning rate [% asymptote/trial]',
-       xlim=c(0,4), ylim=c(-1/3,4/3),
+       main='', xlab='', ylab='learning rate [% asymptote/trial]',
+       xlim=c(0.5,3.5), ylim=c(-1/3,4/3),
        ax=F, bty='n')
   
-  lines(x=c(0,4),
+  if(!is.null(main)) {
+    title(main=main, adj=0, cex.main=2)
+  }
+  
+  lines(x=c(0.5,3.5),
         y=c(1,1),
         col='#999999',
         lw=2,
         lty=2)
-  lines(x=c(0,4),
+  lines(x=c(0.5,3.5),
         y=c(0,0),
         col='#999999',
         lw=2,
@@ -444,7 +462,8 @@ plotLearningRates <- function(target='inline') {
   
   axis(side = 1,
        at = c(1,2,3),
-       labels = groups)
+       labels = c('control','cursor\njump','hand\nview'),
+       las=2)
   axis(side = 2,
        at = c(0,0.5,1))
   
@@ -457,22 +476,34 @@ plotLearningRates <- function(target='inline') {
 }
 
 
-fig2_learning <- function() {
+fig2_learning <- function(target='inline') {
   
+  setupFigureFile(target = target,
+                  filename = sprintf('doc/fig2_training.%s', target),
+                  width=8, height=6, dpi=300
+                  )
   
-  layout( mat = matrix(c(1,1,1,2,3,4),ncol=3,nrow=2,byrow = TRUE) )
+  layout( mat = matrix(data = c(1,1,1,2,3,4),
+                       ncol = 3,
+                       nrow = 2,
+                       byrow = TRUE),
+          width=c(0.4,.3,.3))
   
   par(mar=c(4,4,2.3,0.1))
   
-  plotTraining(target='inline')
+  plotTraining(target='inline', main='A')
   
-  plotFittedExponentials(target='inline')
+  # par(mar=c(5,4,2.3,0.1))
   
-  plotAsymptotes(target='inline')
+  plotFittedExponentials(target='inline', trials=c(1:30), main='B')
   
-  plotLearningRates(target='inline')
+  plotAsymptotes(target='inline', main='C')
   
+  plotLearningRates(target='inline', main='D')
   
+  if (target %in% c('pdf','svg','png','tiff')) {
+    dev.off()
+  }
   
 }
 
@@ -486,7 +517,7 @@ plotNoCursors <- function(target='inline') {
                   width = 8,
                   height=6,
                   dpi=300,
-                  sprintf('doc/fig4_nocursors.%s', target))
+                  sprintf('doc/fig3_nocursors.%s', target))
   
   groups <- c('control', 'cursorjump', 'handview')
   
@@ -573,5 +604,9 @@ plotNoCursors <- function(target='inline') {
           # title='groups:',
           bg='#FFFFFF',
           xpd=TRUE)
+  
+  if (target %in% c('pdf','svg','png','tiff')) {
+    dev.off()
+  }
   
 }
