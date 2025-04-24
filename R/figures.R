@@ -66,7 +66,7 @@ plotTraining <- function(target='inline',main=NULL) {
                   width = 8,
                   height=6,
                   dpi=300,
-                  sprintf('doc/fig2_training.%s', target))
+                  sprintf('doc/fig2a_training.%s', target))
   
   groups <- c('control', 'cursorjump', 'handview')
   
