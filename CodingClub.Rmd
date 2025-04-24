@@ -72,9 +72,9 @@ In this experiment participants adapted to a 30 degree rotation, with various ki
 1. Regular cursor feedback: "control"
 2. Cursorjump feedback, where the rotation is shown at 1/3rd the reach on each training trial: "cursorjump"
 3. A group where both the cursor and hand were visible during training: "handview"
-4. A group that was explained the rotation beforehand: "instructed"
+4. A group that was explained the rotation beforehand: "instructed" (we're not using this group here)
 
-All reach were to targets at 45, 90 and 135 degrees.
+All reaches were to targets at 45, 90 and 135 degrees.
 
 ## Data
 
@@ -156,10 +156,15 @@ This new vector $\bar{v}$ now contains the rotated trajectory samples, and we ca
 > Note that $x$ and $y$ can be vectors, such that $v$ and $\bar{v}$ are not column matrices, but rectangular. This can be used to optimize the code for speed. You would first select a sample from each reach with the same target, add the coordinates to a matrix. Then multiply all of them with the same rotation matrix. This means that you only construct the rotation matrix for each target once, and all the matrix multiplication is done at the same time - with fewer loops, and less time spent in R interpretation. The code will be more complicated though, so we will not do this here.
 
 
-Using all the math above, we managed to calculate learning curves: the reach deviations relative to the target (in degrees angle) for every participant in the first 90 trials.
+Using all the math above, we will now calculate learning curves: the reach deviations relative to the target (in degrees angle) for every participant in the first 90 trials.
+
+```{r}
+getAllTraining()
+```
+
+This creates a file in each group's data directory with each participants' reach deviations at/beyond 2.5 cm for the first 90 rotated training trials, corrected for baseline. This can be used to analyse adaptation.
 
 We plot the average within each group, as well as a 95% confidence interval:
-
 
 ```{r fig.width=8, fig.height=6}
 plotTraining()
@@ -185,7 +190,13 @@ This means there is no evidence for or against an different extent of learning b
 
 ## Exponential fits
 
-Bootstrapped exponential curves, fit to the learning curves in each group:
+There is another way to look at these learning curves, and that is to fit an exponential (decay of error) function to the whole series (to reduce noise). Here we bootstrap the parameters for these functions separately for each group. This may take a while...
+
+```{r}
+bootstrapExponentials()
+```
+
+Now we can plot these bootstrapped exponential curves, fit to the learning curve data in each group:
 
 ```{r fig.width=8, fig.height=6}
 plotFittedExponentials()
@@ -216,14 +227,29 @@ plotLearningRates()
 
 Plotted this way, the difference in learning rates that we saw earlier might not be that impactful.
 
+We can also plot all of these in one multi-panel figure, that would be suitable for a journal publication, or maybe a thesis. This function calls all four other functions, and makes sure that the four figures end up in a nice plot. For the exponential fits, it only shows the first 30 trials. To do this we added an argument to the plotting function that by default plots the same figure we had before, or narrows down the range of trials.
+
+```{r fig.width=8, fig.height=6}
+fig2_learning()
+```
+
+
 # No-cursor reaches
 
-There are two kinds no-cursor reach blocks: with and without strategy. Without strategy is supposed to measure classic implicit adaptation, while with strategy is supposed to cpature both implicit and explicit adapation.
+There are two kinds no-cursor reach blocks: with and without strategy. Without strategy is supposed to measure classic implicit adaptation, while with strategy is supposed to capture both implicit and explicit adaptation. Originally we used Process Dissociation Procedure to separate implicit and explicit adaptation:
 
 - implicit: without-strategy no-cursor reaches
 - explicit: with-strategy no-cursor reaches minus the without-strategy no-cursor reaches
 
-We will use all of the no-cursor reach deviations. Baseline both the with and without strategy no-cursor using the aligned data. Then plot te group averages with confidence intervals, and the individual data.
+However, this is not used anymore in the field.
+
+We will use all of the no-cursor reach deviations. Baseline both the with and without strategy no-cursors using the aligned data. As with the reach training data, we also create one file per group that has no-cursor reach deviations for every participant, calculated the same way as for the training reaches.
+
+```{r}
+getAllNoCursors()
+```
+
+Then plot the group averages with confidence intervals, and the individual data. The design of this plot is based on what was in the original paper.
 
 ```{r}
 plotNoCursors()
@@ -238,22 +264,26 @@ We first verified that there is no effect of strategy use in the control group. 
 
 First, there is no effect of strategy use in the control group. This means, we can use it to see if strategies were evoked in the other two groups.
 
-Comparing the handview and cursorjump group with-strategy no cursor reaches with those in the control group, shows a difference in both case. This means that in these two groups there were explicit strategies.
+Comparing the handview and cursorjump group with-strategy no cursor reaches with those in the control group, shows a difference in both cases. This means that in these two groups there were explicit strategies.
 
 Then, the cursorjump group does not have significantly lower reach deviations in the without-strategy no-cursor blocks as compared to the control group. That means the implicit adaptation is not different between these two groups.
 
-The handview group has a difference in the without strategy no-cursor reaches with both the control group and the cursorjump group. This means that implicit adaptation is lower in thsi group as compared to others.
+The handview group has a difference in the without strategy no-cursor reaches with both the control group and the cursorjump group. This means that implicit adaptation is lower in this group as compared to others.
 
 
 # Plot all figures
 
 ```{r}
 
-for (target in c('pdf')) {
+for (target in c('pdf', 'png')) {
 
   plotTraining(target=target)
   plotFittedExponentials(target=target)
+  plotAsymptotes(target=target)
+  plotLearningRates(target=target)
   plotNoCursors(target=target)
+  
+  fig2_learning(target=target)
 
 }
 
