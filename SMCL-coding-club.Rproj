@@ -1,7 +1,7 @@
 Version: 1.0
 ProjectId: d6dd6d74-226a-4749-bb03-81e6c921d273
 
-RestoreWorkspace: Default
+RestoreWorkspace: No
 SaveWorkspace: Default
 AlwaysSaveHistory: Default
 
@@ -12,3 +12,5 @@ Encoding: UTF-8
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
+
+ProjectName: Feedback Dependent Adaptation Processes
