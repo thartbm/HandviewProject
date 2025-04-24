@@ -233,6 +233,12 @@ We can also plot all of these in one multi-panel figure, that would be suitable 
 fig2_learning()
 ```
 
+*Training Results*:
+
+1. There may or may not be a small difference in the rate of learning: the people in the control group might learn a little slower than those in the other two groups. The control group had the least amount of information about the rotation, so that could make sense, but it doesn't show up in all approaches.
+2. The asymptotic level of adaptation is similar in all groups.
+
+Since the research questions are about differences in implicit and explicit adaptation in reach aftereffects, and potentially efferent and afferent contributions to hand localization. So we do not need group differences in the training task. In fact, strong differences (especially in the asymptotes) would make subsequent analyses harder. So for now, we accept that there are no consequential differences in training. That means we can analyze the no-cursor data without further restrictions.
 
 # No-cursor reaches
 
@@ -270,6 +276,10 @@ Then, the cursorjump group does not have significantly lower reach deviations in
 
 The handview group has a difference in the without strategy no-cursor reaches with both the control group and the cursorjump group. This means that implicit adaptation is lower in this group as compared to others.
 
+*No-cursor Results*:
+
+1. With more information about the rotation in the visual feedback (cursorjump and handview groups) it seems that the amount of explicit adaptation may increase. Which is probably not all that surprising.
+2. However, at the same time, the amount of implicit adaptation might also decrease. This for sure happens in the handview group, but it's not significant in the cursorjump group. It might not be immediately clear why this would happen. However, participants can only adapt 30 degrees, and if a lot of adaptation is already explicit, there is less room for implicit adaptation. (This makes sense in the competition account of adaptation: Scott Albert et al., 2022.) 
 
 # Plot all figures
 
