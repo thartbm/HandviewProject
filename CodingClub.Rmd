@@ -47,6 +47,12 @@ Finally, we have written some custom functions for this project, that we want av
 source('R/data.R')
 # scripts for training reaches:
 source('R/reaches.R')
+# scripts for figures:
+source('R/figures.R')
+# scripts for statistics:
+source('R/statistics.R')
+# scripts for exponentials:
+source('R/exponentials.R')
 ```
 
 ### Download data
