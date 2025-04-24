@@ -275,6 +275,12 @@ The handview group has a difference in the without strategy no-cursor reaches wi
 
 ```{r}
 
+# implemented target options are:
+# - pdf
+# - png
+# - tiff
+# - svg
+
 for (target in c('pdf', 'png')) {
 
   plotTraining(target=target)
